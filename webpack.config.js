@@ -3,7 +3,6 @@ const HtmlPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
-    
     // 入口文件的配置
     entry: {
         app: './src/index.js',
