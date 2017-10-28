@@ -1,7 +1,9 @@
 const path = require('path');
 const HtmlPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const glob = require('glob');
+const PurifyCSSPlugin = require('purifycss-webpack');
 module.exports = {
     // 入口文件的配置
     entry: {
@@ -28,9 +30,12 @@ module.exports = {
                 //         loader: 'css-loader'
                 //     }
                 // ]
-                use: ExtractTextPlugin.extract({
+                use: ExtractTextPlugin.extract({  // 将css单独打包的插件
                     fallback: 'style-loader',
-                    use: 'css-loader'
+                    use: [{
+                        loader: 'css-loader',
+                        options: { importLoader: 1}
+                    }, 'postcss-loader']
                 })
             },
             {
@@ -46,6 +51,35 @@ module.exports = {
                         outputPath: 'images/' // 文件输出的路径
                     }
                 }]
+            },
+            {
+                test: /\.scss$/,
+                // use: [{
+                //     loader: 'style-loader'
+                // },{
+                //     loader: 'css-loader'
+                // },{
+                //     loader: 'sass-loader'
+                // }],
+                use: ExtractTextPlugin.extract({
+                    use: [{
+                        loader: 'css-loader'
+                    },{
+                        loader: 'sass-loader'
+                    }],
+                    fallback: 'style-loader'
+                })
+            },
+            {
+                test: /\.(jsx|js)$/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            "env"
+                        ]
+                    }
+                }
             }
         ]
     },
@@ -60,7 +94,10 @@ module.exports = {
             template: './src/index.html'
         }),
         new ExtractTextPlugin('css/styles.css'),
-        // new UglifyJSPlugin()    // 在开发环境中会导致dev-server出错  
+        // new UglifyJSPlugin()    // 在开发环境中会导致dev-server出错 
+        // new PurifyCSSPlugin({
+        //     paths: glob.sync(path.join(__dirname, 'src/*.html')),
+        // }) 
         
     ],
     // devServer

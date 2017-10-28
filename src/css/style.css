@@ -3,3 +3,17 @@
     width: 200px;
     background: url('../assets/IMG_4022.JPG');
 }
+.aa{
+    width: 1px;
+    height: 1px;
+}
+#aaa {
+    width: 10px;
+    height: 10px;
+    display: flex;
+    border-radius: 50%;
+    transform: rotate(30deg);
+}
+#div66 {
+    width: 10px;
+}
